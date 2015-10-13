@@ -1,5 +1,5 @@
 import dolfin as df
-
+"""
 d = 10
 
 # Sub domain for Dirichlet boundary condition
@@ -13,7 +13,7 @@ mesh = df.BoxMesh(df.Point(0, 0, 0), df.Point(d, d, d), 15, 15, 15)
 g = df.Expression("x[0]")
 
 m = df.Constant((0, 1, 0))
-
+"""
 def amr(mesh, m, DirichletBoundary, g):
     V = df.FunctionSpace(mesh, "CG", 1)
 
@@ -24,7 +24,7 @@ def amr(mesh, m, DirichletBoundary, g):
     u = df.Function(V)
     v = df.TestFunction(V)
     costheta = df.dot(m, df.grad(u))
-    sigma = 1/(1 + costheta)
+    sigma = 1/(1 + costheta**2)
     F = df.inner(sigma*df.grad(u), df.grad(v))*df.dx
 
     # Compute solution
@@ -33,7 +33,5 @@ def amr(mesh, m, DirichletBoundary, g):
 
     # Plot solution and solution gradient
     df.plot(u, title="Solution")
-    df.plot(df.grad(u), title="Solution gradient")
+    df.plot(sigma*df.grad(u), title="Solution gradient")
     df.interactive()
-
-amr(mesh, m, DirichletBoundary, g)
