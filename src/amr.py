@@ -9,29 +9,31 @@ class DirichletBoundary(df.SubDomain):
 
 # Create mesh and define function space
 mesh = df.BoxMesh(df.Point(0, 0, 0), df.Point(d, d, d), 15, 15, 15)
-df.File("mesh.pvd") << mesh
 
-V = df.FunctionSpace(mesh, "CG", 1)
-
-# Define boundary condition
 g = df.Expression("x[0]")
-bc = df.DirichletBC(V, g, DirichletBoundary())
 
-# Define variational problem
-u = df.Function(V)
-v = df.TestFunction(V)
-m = df.Constant((0, 0, 1))
-F = df.inner((1/(1 + df.dot(m, df.grad(u))))*df.grad(u), df.grad(v))*df.dx
+m = df.Constant((0, 1, 0))
 
-# Compute solution
-df.solve(F == 0, u, bc, solver_parameters={"newton_solver":
-                                           {"relative_tolerance": 1e-6}})
+def amr(mesh, m, DirichletBoundary, g):
+    V = df.FunctionSpace(mesh, "CG", 1)
 
-# Plot solution and solution gradient
-df.plot(u, title="Solution")
-df.plot(df.grad(u), title="Solution gradient")
-df.interactive()
+    # Define boundary condition
+    bc = df.DirichletBC(V, g, DirichletBoundary())
 
-# Save solution in VTK format
-file = df.File("nonlinear_poisson.pvd")
-file << u
+    # Define variational problem
+    u = df.Function(V)
+    v = df.TestFunction(V)
+    costheta = df.dot(m, df.grad(u))
+    sigma = 1/(1 + costheta)
+    F = df.inner(sigma*df.grad(u), df.grad(v))*df.dx
+
+    # Compute solution
+    df.solve(F == 0, u, bc, solver_parameters={"newton_solver":
+                                               {"relative_tolerance": 1e-6}})
+
+    # Plot solution and solution gradient
+    df.plot(u, title="Solution")
+    df.plot(df.grad(u), title="Solution gradient")
+    df.interactive()
+
+amr(mesh, m, DirichletBoundary, g)
