@@ -22,9 +22,9 @@ d = 20e-9  # lateral dimensions (nm)
 n = 5  # number of computed eigenvalues
 
 nxy = 15  # discretisation in lateral directions
-nz = 5  # discretisation in out-of-plane direction
+nz = 10  # discretisation in out-of-plane direction
 
-B = 0
+B = 0.3
 
 mesh = df.BoxMesh(df.Point(0, 0, 0), df.Point(d, d, thickness), nxy, nxy, nz)
 sim = evnmsim(mesh, Ms, m_init=(1, 0, 0),
@@ -44,4 +44,4 @@ class DirichletBoundary(df.SubDomain):
 
 g = df.Expression("x[0]")
 
-amr(mesh, sim.llg.m_field.f, DirichletBoundary, g)
+print amr(mesh, sim.llg.m_field.f, DirichletBoundary, g, d)
