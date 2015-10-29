@@ -42,6 +42,6 @@ class DirichletBoundary(df.SubDomain):
     def inside(self, x, on_boundary):
         return (abs(x[0] - d) < df.DOLFIN_EPS or abs(x[0]) < df.DOLFIN_EPS) and on_boundary
 
-g = df.Expression("x[0]")
+g = df.Expression("d - x[0]", d=d)
 
 print amr(mesh, sim.llg.m_field.f, DirichletBoundary, g, d)

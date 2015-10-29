@@ -1,6 +1,6 @@
 import dolfin as df
 
-def amr(mesh, m, DirichletBoundary, g, d, s0=1, alpha=1):
+def amr(mesh, m, DirichletBoundary, g, d, s0=1, alpha=1000):
     V = df.FunctionSpace(mesh, "CG", 1)
 
     # Define boundary condition
@@ -20,5 +20,6 @@ def amr(mesh, m, DirichletBoundary, g, d, s0=1, alpha=1):
 
     # Plot solution and solution gradient
     df.plot(u, title="Solution")
-    df.plot(sigma*df.grad(u), title="Solution gradient")
+    df.plot(-sigma*df.grad(u), title="current density")
+    df.plot(E/df.dot(E, E))
     df.interactive()
