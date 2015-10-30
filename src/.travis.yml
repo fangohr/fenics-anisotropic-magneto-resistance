@@ -1,0 +1,14 @@
+language: python
+python:
+        - "2.7"
+before_install:
+        - sudo add-apt-repository ppa:fenics-packages/fenics -y
+        - sudo apt-get update -qq
+        - sudo apt-get install -qq fenics
+	- sudo pip install numpy
+virtualenv:
+        system_site_packages: true
+script:
+        - export PYTHONPATH="/usr/lib/python2.7/dist-packages/dolfin:$PYTHONPATH"
+        - ls /usr/lib/python2.7/dist-packages/dolfin
+        - make test
