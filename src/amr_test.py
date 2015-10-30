@@ -2,6 +2,7 @@ import dolfin as df
 import numpy as np
 from amr import amr, compute_flux
 
+print df.__version__
 d = 1  # lateral dimensions (m)
 n = 10  # discretisation
 mesh = df.BoxMesh(df.Point(0, 0, 0), df.Point(d, d, d), n, n, n)
