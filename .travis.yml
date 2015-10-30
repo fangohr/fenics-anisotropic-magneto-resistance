@@ -9,4 +9,4 @@ before_install:
 virtualenv:
         system_site_packages: true
 script:
-        - make test
+        - py.test
