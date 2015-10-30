@@ -9,6 +9,4 @@ before_install:
 virtualenv:
         system_site_packages: true
 script:
-        - export PYTHONPATH="/usr/lib/python2.7/dist-packages/dolfin:$PYTHONPATH"
-        - ls /usr/lib/python2.7/dist-packages/dolfin
         - make test
