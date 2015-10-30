@@ -44,28 +44,5 @@ class DirichletBoundary(df.SubDomain):
 
 g = df.Expression("d - x[0]", d=d)
 
-j = amr(mesh, sim.llg.m_field.f, DirichletBoundary, g, d)
-
-mesh2d = df.RectangleMesh(df.Point(0, 0), df.Point(d, thickness), 100, 20)
-
-functionspace = df.VectorFunctionSpace(mesh2d, 'CG', 1, 3)
-j_f = df.Function(functionspace)
-j_f_array = j_f.vector().array()
-
-n_nodes = mesh2d.num_vertices()  # number of mesh nodes
-
-coords = 0.98*mesh2d.coordinates()
-
-for i in xrange(len(coords)):
-    sampling_point = coords[i]
-    sampled_value = j(0, sampling_point[0], sampling_point[1])
-
-    # Populate x, y, and z components of m to function array.
-    j_f_array[i] = sampled_value[0]
-    j_f_array[n_nodes + i] = sampled_value[1]
-    j_f_array[2*n_nodes + i] = sampled_value[2]
-
-# Convert function array back to dolfin function.
-j_f.vector().set_local(j_f_array)
-
-print df.assemble(j_f[0]*df.dx)   
+mesh2d = df.RectangleMesh(df.Point(0, 0), df.Point(d, thickness), 100, 50)
+print amr(mesh, sim.llg.m_field.f, DirichletBoundary, g, mesh2d)
