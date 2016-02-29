@@ -29,7 +29,7 @@ def amr(mesh, m, DirichletBoundary, g, mesh2d, s0=1, alpha=1):
 
     u = df.Function(V)  # new unknown function
     eps = 1.0           # error measure ||u-u_k||
-    tol = 1.0E-5        # tolerance
+    tol = 1.0e-20       # tolerance
     iter = 0            # iteration counter
     maxiter = 50        # maximum number of iterations allowed
     while eps > tol and iter < maxiter:
